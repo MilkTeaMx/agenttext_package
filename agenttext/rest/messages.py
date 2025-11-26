@@ -43,7 +43,7 @@ class Messages:
         if sender:
             params["sender"] = sender
         if unread_only is not None:
-            params["unreadOnly"] = unread_only
+            params["unreadOnly"] = str(unread_only).lower()
         if limit is not None:
             params["limit"] = limit
         if since:
@@ -51,9 +51,11 @@ class Messages:
         if search:
             params["search"] = search
         if has_attachments is not None:
-            params["hasAttachments"] = has_attachments
+            params["hasAttachments"] = str(has_attachments).lower()
+        # IMPORTANT: Always include excludeOwnMessages if explicitly set
+        # The API defaults to true, so we must explicitly pass false
         if exclude_own_messages is not None:
-            params["excludeOwnMessages"] = exclude_own_messages
+            params["excludeOwnMessages"] = str(exclude_own_messages).lower()
         return self._client._request("GET", "/messages", params=params)
     
     def get_unread(self) -> Dict[str, Any]:
